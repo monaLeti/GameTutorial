@@ -7,16 +7,23 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.URL;
 import java.util.ArrayList;
+import game.framework.Animation;
 
 
 public class StartingClass extends Applet implements Runnable, KeyListener{
 	
 	private Robot robot;
+	
+	private ArrayList <Image>imagesHeliboy;
+
+	private int i;
+	
 	private Heliboy hb, hb2;
-	private Image image, currentSprite, character, background, down, jumped, heliboy;
+	private Image image, currentSprite, character, character2, character3, background, down, jumped, heliboy, heliboy2, heliboy3, heliboy4, heliboy5;
 	private Graphics second;
 	private URL base;
 	private static Background bg1, bg2;
+	private Animation anim, hanim;
 	
 	@Override
 	public void init(){
@@ -34,17 +41,39 @@ public class StartingClass extends Applet implements Runnable, KeyListener{
 			System.err.println("Error picture");
 		}
 		
-		character = getImage(base, "data/character.png");
-		down = getImage(base, "data/down.png");
-		jumped = getImage(base, "data/jumped.png");
-		heliboy = getImage(base, "data/walk.png");
+		character = getImage(base, "data/character1.png");
+		character2 = getImage(base, "data/character2.png");
+		character3 = getImage(base, "data/character3.png");
+		
+		down = getImage(base, "data/down1.png");
+		jumped = getImage(base, "data/jumped1.png");
+		
+		heliboy = getImage(base, "data/heliboy.png");
+		heliboy2 = getImage(base, "data/heliboy2.png");
+		heliboy3 = getImage(base, "data/heliboy3.png");
+		heliboy4 = getImage(base, "data/heliboy4.png");
+		heliboy5 = getImage(base, "data/heliboy5.png");
+		
+		background = getImage(base, "data/background.png");
+		
 		
 		currentSprite = character;
-		background = getImage(base, "data/background.png");
 	}
 	
 	@Override
 	public void start(){
+		i=0;
+		imagesHeliboy=new ArrayList<Image>();
+		imagesHeliboy.add(heliboy);
+		imagesHeliboy.add(heliboy2);
+		imagesHeliboy.add(heliboy3);
+		imagesHeliboy.add(heliboy4);
+		imagesHeliboy.add(heliboy5);
+		imagesHeliboy.add(heliboy4);
+		imagesHeliboy.add(heliboy3);
+		imagesHeliboy.add(heliboy2);
+		
+		
 		
 		bg1 = new Background(0, 0);
 		bg2 = new Background(2160, 0);
@@ -59,12 +88,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener{
 	
 	@Override
 	public void stop(){
-		super.stop();
+		
 	}
 	
 	@Override
 	public void destroy(){
-		super.destroy();
+		
 	}
 
 	@Override
@@ -90,6 +119,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener{
 			hb2.update();
 			bg1.update();
 			bg2.update();
+//			animate();
 			repaint();
 			try{
 				Thread.sleep(17);
@@ -100,6 +130,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener{
 		}
 		
 	}
+//	public void animate(){
+//		anim.update(10);
+//		hanim.update(50);
+//	}
 	@Override
 	public void update(Graphics g){
 		if(image == null){
@@ -120,17 +154,40 @@ public class StartingClass extends Applet implements Runnable, KeyListener{
 	public void paint(Graphics g){
 		g.drawImage(background, bg1.getbX(), bg1.getbY(), this);
 		g.drawImage(background, bg2.getbX(), bg2.getbY(), this);
+		
 		ArrayList projectiles = robot.getProjectiles();
 		for(int i =0; i<projectiles.size(); i++){
 			Projectile p = (Projectile) projectiles.get(i);
 			g.setColor(Color.YELLOW);
 			g.fillRect(p.getCenterX(), p.getCenterY(), 10, 5);
 		}
-		g.drawImage(heliboy, hb.getCenterX()-48, hb.getCenterY()-48,this);
-		g.drawImage(heliboy, hb2.getCenterX()-48, hb2.getCenterY()-48,this);
 		g.drawImage(currentSprite, robot.getCenterX()-61, robot.getCenterY()-63, this);
 		
+		g.drawImage(imagesHeliboy.get(i), hb.getCenterX(), hb.getCenterY(), this);
+		if(hb.isChange()==false){
+			i++;
+			if(i==imagesHeliboy.size()){
+				i=0;
+			}
+			g.drawImage(imagesHeliboy.get(i), hb.getCenterX(), hb.getCenterY(), this);
+			hb.setChange(true);
+		}
+		g.drawImage(imagesHeliboy.get(i), hb2.getCenterX(), hb2.getCenterY(), this);
+		if(hb2.isChange()==false){
+			i++;
+			if(i==imagesHeliboy.size()){
+				i=0;
+			}
+			g.drawImage(imagesHeliboy.get(i), hb2.getCenterX(), hb2.getCenterY(), this);
+			hb2.setChange(true);
+		}
+		
+		
+		
+		
+		
 	}
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		

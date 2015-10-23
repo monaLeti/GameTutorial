@@ -1,9 +1,19 @@
 
 public class Enemy {
+	private final long MAXTIME = 100;
 	private int maxHealth, currentHealth, power, speedX, centerX, centerY;
+	private long time;
+	private boolean change;
 	private Background bg = StartingClass.getBg1(); //The enemy has to move in the same direction as the background
 	
 	public void update(){
+		time +=10;
+		if(time >= MAXTIME){
+			time =0;
+			if(isChange()==true){
+				change = false;
+			}
+		}
 		centerX += speedX;
 		speedX = bg.getSpeedX();
 	}
@@ -54,5 +64,17 @@ public class Enemy {
 	}
 	public void setBg(Background bg) {
 		this.bg = bg;
+	}
+	public long getTime() {
+		return time;
+	}
+	public void setTime(long time) {
+		this.time = time;
+	}
+	public boolean isChange() {
+		return change;
+	}
+	public void setChange(boolean change) {
+		this.change = change;
 	}
 }
